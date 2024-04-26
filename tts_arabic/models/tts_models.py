@@ -86,27 +86,54 @@ class HifiGanVocoder:
         )[0].astype(float)
         
         return wave_out[0, 0]
-    
+
+
+class HifiGanDenoiser:
+    def __init__(self,
+                sd_path: str = "data/denoiser.onnx") -> None:    
+        self.ort_sess = ort.InferenceSession(
+            sd_path,
+            providers=['CUDAExecutionProvider', 
+                       'CPUExecutionProvider'])
+        
+    def infer(self, wave, denoise: float = 0.005):
+        """
+        Parameters:
+            wave (ndarray): Waveform from HifiGan, shape: [n_samples]
+            denoise (float): Denoising strength
+            
+        Returns:
+            (ndarray): Denoised waveform, shape: [n_samples]
+        """
+        wave_out = self.ort_sess.run(None, {
+            'audio': wave[None].astype(np.float32), 
+            'strength': np.array([denoise], dtype=np.float64)})[0]
+        return wave_out[0]
+
 
 class FastPitch2Wave:
     def __init__(self,
                  sd_path_ttmel: str = "data/fp_ms.onnx",
-                 sd_path_mel2wave: str = "data/hifigan.onnx"
+                 sd_path_mel2wave: str = "data/hifigan.onnx",
+                 sd_path_denoiser: str = "data/denoiser.onnx",
                  ) -> None:
         self.ttmel_model = FastPitch2Mel(sd_path_ttmel)
         self.mel2wave_model = HifiGanVocoder(sd_path_mel2wave)
+        self.hifigan_denoiser = HifiGanDenoiser(sd_path_denoiser)
     
     def infer(self, 
               text: str, 
-              pace: float = 1., 
               speaker: int = 0,
+              pace: float = 1.,              
+              denoise: float = 0.005,
               vowelizer: _VOWELIZER = None,        
               ) -> np.ndarray:
         """
         Parameters:
             text (str): Text
-            pace (float): Speaker pace
             speaker (int): Speaker id
+            pace (float): Speaker pace            
+            denoise (float): Denoiser strength   
             
         Returns:
             (ndarray): Waveform sampled at 22050Hz, shape: [n_samples]
@@ -116,5 +143,8 @@ class FastPitch2Wave:
                                           speaker=speaker,
                                           vowelizer=vowelizer)
         wave_out = self.mel2wave_model.infer(mel_spec)
+        if denoise > 0:
+            wave_out = self.hifigan_denoiser.infer(wave_out, 
+                                                   denoise=denoise)
         
         return wave_out

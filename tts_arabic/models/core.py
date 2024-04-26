@@ -13,7 +13,8 @@ except:
 
 def play_wave(wave, 
               sr: int = 22050, 
-              blocking: bool = False) -> None:
+              blocking: bool = False
+              ) -> None:
     sd.play(wave, samplerate=sr, blocking=blocking)
 
 def get_model_path(package_path, name="fastpitch"):
@@ -29,21 +30,26 @@ def get_model(name='fastpitch2wave'):
 
     fastpitch_path = get_model_path(package_path, 'fastpitch')
     hifigan_path = get_model_path(package_path, 'hifigan')
-    tts_model = FastPitch2Wave(fastpitch_path, hifigan_path)
+    denoiser_path = get_model_path(package_path, 'denoiser')
+    tts_model = FastPitch2Wave(
+        fastpitch_path, hifigan_path,
+        denoiser_path)
     
     return tts_model
 
 def tts(text: str, 
-        pace: float = 1., 
         speaker: int = 0,
+        pace: float = 1.,
+        denoise: float = 0.005,   
         play: bool = False,
         vowelizer: _VOWELIZER = None,
         ) -> np.ndarray:
     """
     Parameters:
         text (str): Text
-        pace (float): Speaker pace
         speaker (int): Speaker id (0-3)
+        pace (float): Speaker pace
+        denoise (float): Denoiser strength   
         vowelizer [shakkala|shakkelha]: Vowelizer model 
         
     Returns:
@@ -63,7 +69,7 @@ def tts(text: str,
     if not hasattr(tts, 'model'):
         setattr(tts, 'model', get_model())
     
-    wave_out = tts.model.infer(text, pace, speaker, 
+    wave_out = tts.model.infer(text, speaker, pace, denoise, 
                                vowelizer=vowelizer)
     if play: play_wave(wave_out)
     

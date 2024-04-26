@@ -13,7 +13,7 @@ from tts_arabic import tts
 
 # %%
 text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
-wave = tts(text, pace=0.9, speaker=2, play=True)
+wave = tts(text, speaker=2, pace=0.9, play=True)
 
 # %% Buckwalter transliteration
 text = ">als~alAmu Ealaykum yA Sadiyqiy."
@@ -28,6 +28,5 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 ## TODO
 
-- [ ] Add HifiGan denoiser
 - [ ] Add batch support
 - [ ] Extend Readme

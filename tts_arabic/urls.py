@@ -8,6 +8,10 @@ files_dict = {
         'file': 'data/hifigan.onnx',
         'url': 'https://drive.google.com/file/d/1rZxulMhjrlQDheoGy7xnlWGjFYyjF9Gz/view?usp=sharing'
     },
+    'denoiser': {
+        'file': 'data/denoiser.onnx',
+        'url': 'https://drive.google.com/file/d/1XWgV7F7eQdRy-KTvCteyXVXAQoNIRa7z/view?usp=sharing'
+    },
     'shakkala': {
         'file': 'data/shakkala.onnx',
         'url': 'https://drive.google.com/file/d/1_BbfNj8fsSeGGSkws1tN6EB4zSmpTGp2/view?usp=sharing'
