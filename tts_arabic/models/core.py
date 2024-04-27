@@ -25,7 +25,7 @@ def get_model_path(package_path, name="fastpitch"):
         gdown.download(files_dict[name]['url'], output=model_path.as_posix(), fuzzy=True)
     return model_path.as_posix()
 
-def get_model(name='fastpitch2wave'):   
+def get_model(name='fastpitch2wave', cuda=True):   
     package_path = Path(__file__).parent.parent
 
     fastpitch_path = get_model_path(package_path, 'fastpitch')
@@ -33,7 +33,7 @@ def get_model(name='fastpitch2wave'):
     denoiser_path = get_model_path(package_path, 'denoiser')
     tts_model = FastPitch2Wave(
         fastpitch_path, hifigan_path,
-        denoiser_path)
+        denoiser_path, cuda=cuda)
     
     return tts_model
 
@@ -43,6 +43,7 @@ def tts(text: str,
         denoise: float = 0.005,   
         play: bool = False,
         vowelizer: _VOWELIZER = None,
+        cuda: bool = True
         ) -> np.ndarray:
     """
     Parameters:
@@ -50,7 +51,8 @@ def tts(text: str,
         speaker (int): Speaker id (0-3)
         pace (float): Speaker pace
         denoise (float): Denoiser strength   
-        vowelizer [shakkala|shakkelha]: Vowelizer model 
+        vowelizer [shakkala|shakkelha]: Vowelizer model
+        cuda (bool): Use CUDA provider?
         
     Returns:
         (ndarray): Waveform sampled at 22050Hz, shape: [n_samples]
@@ -58,7 +60,7 @@ def tts(text: str,
     Examples:
         >>> from tts_arabic import tts
         >>> text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
-        >>> wave = tts(text, pace=0.9, speaker=2, play=True)
+        >>> wave = tts(text, speaker=2, pace=0.9, play=True)
         # Buckwalter transliteration
         >>> text = ">als~alAmu Ealaykum yA Sadiyqiy."
         >>> wave = tts(text, speaker=0, play=True)   
@@ -67,7 +69,7 @@ def tts(text: str,
         >>> wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
     """
     if not hasattr(tts, 'model'):
-        setattr(tts, 'model', get_model())
+        setattr(tts, 'model', get_model(cuda=cuda))
     
     wave_out = tts.model.infer(text, speaker, pace, denoise, 
                                vowelizer=vowelizer)

@@ -7,11 +7,12 @@ from ..vocalizer.models.core import vocalize
 class FastPitch2Mel:
     def __init__(self, 
                  sd_path: str = "data/fp_ms.onnx",
-                 arabic_in: bool = True) -> None:        
+                 arabic_in: bool = True,
+                 cuda: bool = False) -> None:
+        providers = ['CPUExecutionProvider']
+        if cuda: providers.insert(0, 'CUDAExecutionProvider')
         self.ort_sess = ort.InferenceSession(
-            sd_path, 
-            providers=['CUDAExecutionProvider', 
-                       'CPUExecutionProvider'])
+            sd_path, providers=providers)
         self.arabic_in = arabic_in
         
     def _vowelize(self,
@@ -62,11 +63,12 @@ class FastPitch2Mel:
 
 class HifiGanVocoder:
     def __init__(self, 
-                 sd_path: str = "data/hifigan.onnx") -> None:
+                 sd_path: str = "data/hifigan.onnx",
+                 cuda: bool = False) -> None:
+        providers = ['CPUExecutionProvider']
+        if cuda: providers.insert(0, 'CUDAExecutionProvider')
         self.ort_sess = ort.InferenceSession(
-            sd_path, 
-            providers=['CUDAExecutionProvider', 
-                       'CPUExecutionProvider'])
+            sd_path, providers=providers)
     
     def infer(self, 
               mel_spec: np.ndarray
@@ -90,11 +92,12 @@ class HifiGanVocoder:
 
 class HifiGanDenoiser:
     def __init__(self,
-                sd_path: str = "data/denoiser.onnx") -> None:    
+                sd_path: str = "data/denoiser.onnx",
+                cuda: bool = False) -> None:
+        providers = ['CPUExecutionProvider']
+        if cuda: providers.insert(0, 'CUDAExecutionProvider')
         self.ort_sess = ort.InferenceSession(
-            sd_path,
-            providers=['CUDAExecutionProvider', 
-                       'CPUExecutionProvider'])
+            sd_path, providers=providers)
         
     def infer(self, wave, denoise: float = 0.005):
         """
@@ -116,10 +119,11 @@ class FastPitch2Wave:
                  sd_path_ttmel: str = "data/fp_ms.onnx",
                  sd_path_mel2wave: str = "data/hifigan.onnx",
                  sd_path_denoiser: str = "data/denoiser.onnx",
+                 cuda: bool = False
                  ) -> None:
-        self.ttmel_model = FastPitch2Mel(sd_path_ttmel)
-        self.mel2wave_model = HifiGanVocoder(sd_path_mel2wave)
-        self.hifigan_denoiser = HifiGanDenoiser(sd_path_denoiser)
+        self.ttmel_model = FastPitch2Mel(sd_path_ttmel, cuda=cuda)
+        self.mel2wave_model = HifiGanVocoder(sd_path_mel2wave, cuda=cuda)
+        self.hifigan_denoiser = HifiGanDenoiser(sd_path_denoiser, cuda=False)
     
     def infer(self, 
               text: str, 
