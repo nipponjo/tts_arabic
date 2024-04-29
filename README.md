@@ -26,7 +26,3 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 ```
 
-## TODO
-
-- [ ] Add batch support
-- [ ] Extend Readme
