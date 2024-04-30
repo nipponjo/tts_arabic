@@ -99,7 +99,7 @@ class HifiGanDenoiser:
         self.ort_sess = ort.InferenceSession(
             sd_path, providers=providers)
         
-    def infer(self, wave, denoise: float = 0.005):
+    def infer(self, wave, denoise: float = 0.005) -> np.ndarray:
         """
         Parameters:
             wave (ndarray): Waveform from HifiGan, shape: [n_samples]

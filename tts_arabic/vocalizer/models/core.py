@@ -8,7 +8,7 @@ from ..models import Shakkala, Shakkelha
 _MODEL_TYPE = Literal['shakkala', 'shakkelha']
 
 
-def get_model_path(package_path, name="fastpitch"):
+def get_model_path(package_path, name="fastpitch") -> str:
     model_path = package_path.joinpath(files_dict[name]['file'])     
     if not model_path.parent.exists():
         model_path.parent.mkdir(parents=True)

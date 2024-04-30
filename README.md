@@ -5,6 +5,24 @@ Install with:
 pip install git+https://github.com/nipponjo/tts_arabic.git
 ```
 
+Basic usage:
+```python
+
+text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
+wave = tts(
+    text, # input text
+    speaker = 1, # speaker id; choose between 0,1,2,3
+    pace = 1, # speaker pace
+    denoise = 0.005, # HiFiGAN denoiser strength
+    play = True, # play audio?
+    save_to = './test.wav', # Optionally; save audio WAV file
+    bits_per_sample = 32, # when save_to is specified (8, 16 or 32 bits)
+    vowelizer = None, # vowelizer model
+    cuda = True, # use CUDA provider?
+    )
+
+```
+
 Examples:
 ```python
 
@@ -25,4 +43,3 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 
 ```
-
