@@ -15,14 +15,20 @@ def play_wave(wave,
               ) -> None:
     sd.play(wave, samplerate=sr, blocking=blocking)
 
-def get_model_path(package_path: Path, 
+
+
+def get_model_path(package_path: Path = None, 
                    name: str = "fastpitch"
                    ) -> str:
-    model_path = package_path.joinpath(files_dict[name]['file'])     
+    file_entry = files_dict[name]
+    if package_path is None:
+        package_path = Path(__file__).parent.parent
+    model_path = package_path.joinpath(file_entry['file']) 
     if not model_path.parent.exists():
         model_path.parent.mkdir(parents=True)
-    if not model_path.exists():
-        gdown.download(files_dict[name]['url'], output=model_path.as_posix(), fuzzy=True)
+    if not model_path.exists() or (model_path.lstat().st_mtime < file_entry.get('timestamp', 0)):
+        gdown.download(file_entry['url'], output=model_path.as_posix(), fuzzy=True)
+    
     return model_path.as_posix()
 
 def get_model(name: str = 'fastpitch2wave', 
@@ -45,6 +51,8 @@ def tts(text: str,
         denoise: float = 0.005,   
         play: bool = False,
         vowelizer: _VOWELIZER = None,
+        pitch_mul: float = 1.,
+        pitch_add: float = 0.,      
         save_to: str = None,
         bits_per_sample: int = 32,
         cuda: bool = True
@@ -80,7 +88,9 @@ def tts(text: str,
         setattr(tts, 'model', get_model(cuda=cuda))
     
     wave_out = tts.model.infer(text, speaker, pace, denoise, 
-                               vowelizer=vowelizer)
+                               vowelizer=vowelizer, 
+                               pitch_mul=pitch_mul,
+                               pitch_add=pitch_add,)
     if play: play_wave(wave_out)
     if save_to is not None:
         save_wave(wave_out, save_to, sample_rate=22050, 

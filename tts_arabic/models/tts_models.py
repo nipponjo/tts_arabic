@@ -38,6 +38,8 @@ class FastPitch2Mel:
               pace: float = 1., 
               speaker: int = 0,
               vowelizer: _VOWELIZER = None,
+              pitch_mul: float = 1.,
+              pitch_add: float = 0.,
               ) -> np.ndarray:
         """
         Parameters:
@@ -53,9 +55,11 @@ class FastPitch2Mel:
         ids_batch = np.array(token_ids, dtype=np.int64)[None]
         mel_spec = self.ort_sess.run(
             None, {
-                "input": ids_batch, 
-                "pace": np.array([pace], dtype=np.float64),
-                "speaker": np.array([speaker], dtype=np.int64),
+                "token_ids": ids_batch, 
+                "pace": np.array([pace], dtype=np.float32),
+                "speaker": np.array([speaker], dtype=np.int32),
+                "pitch_mul": np.array([pitch_mul], dtype=np.float32),
+                "pitch_add": np.array([pitch_add], dtype=np.float32),
             },)[0].astype(np.float32)
         
         return mel_spec[0]
@@ -130,7 +134,9 @@ class FastPitch2Wave:
               speaker: int = 0,
               pace: float = 1.,              
               denoise: float = 0.005,
-              vowelizer: _VOWELIZER = None,        
+              vowelizer: _VOWELIZER = None,
+              pitch_mul: float = 1.,
+              pitch_add: float = 0.,      
               ) -> np.ndarray:
         """
         Parameters:
@@ -145,7 +151,10 @@ class FastPitch2Wave:
         mel_spec = self.ttmel_model.infer(text, 
                                           pace=pace, 
                                           speaker=speaker,
-                                          vowelizer=vowelizer)
+                                          vowelizer=vowelizer,                                        
+                                          pitch_mul=pitch_mul,
+                                          pitch_add=pitch_add,
+                                          )
         wave_out = self.mel2wave_model.infer(mel_spec)
         if denoise > 0:
             wave_out = self.hifigan_denoiser.infer(wave_out, 
