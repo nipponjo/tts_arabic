@@ -28,6 +28,15 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 ```
 
+ Pretrained models:
+|Model|Model ID|Type|params|
+|-------|---|---|------|
+|FastPitch|fp|Text->Mel|46.3M|
+|MixerTTS|mixer128|Text->Mel|2.9M|
+|MixerTTS|mixer80|Text->Mel|1.5M|
+|HiFi-GAN|hifigan|Vocoder|13.9M|
+|Vocos|vocos|Vocoder|13.4M|
+
 TTS options:
 ```python
 from tts_arabic import tts
