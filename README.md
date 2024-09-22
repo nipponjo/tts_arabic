@@ -29,13 +29,13 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 ```
 
  Pretrained models:
-|Model|Model ID|Type|params|
-|-------|---|---|------|
-|FastPitch|fp|Text->Mel|46.3M|
-|MixerTTS|mixer128|Text->Mel|2.9M|
-|MixerTTS|mixer80|Text->Mel|1.5M|
-|HiFi-GAN|hifigan|Vocoder|13.9M|
-|Vocos|vocos|Vocoder|13.4M|
+|Model|Model ID|Type|#params|Paper|
+|-------|---|---|------|----|
+|FastPitch|fp|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|
+|MixerTTS|mixer128|Text->Mel|2.9M|[arxiv](https://arxiv.org/abs/2110.03584)|
+|MixerTTS|mixer80|Text->Mel|1.5M|[arxiv](https://arxiv.org/abs/2110.03584)|
+|HiFi-GAN|hifigan|Vocoder|13.9M|[arxiv](https://arxiv.org/abs/2010.05646)|
+|Vocos|vocos|Vocoder|13.4M|[arxiv](https://arxiv.org/abs/2306.00814)|
 
 TTS options:
 ```python
