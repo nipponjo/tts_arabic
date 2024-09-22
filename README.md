@@ -1,5 +1,7 @@
 Arabic TTS model (FastPitch) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format.
 
+Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
+
 Install with:
 ```
 pip install git+https://github.com/nipponjo/tts_arabic.git
