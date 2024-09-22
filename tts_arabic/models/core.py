@@ -1,3 +1,4 @@
+from typing import Literal, Optional, get_args
 import numpy as np
 import gdown
 
@@ -9,6 +10,10 @@ try:
 except:
     pass
 
+_MODEL_ID = Literal['fastpitch', 'mixer128', 'mixer80']
+_VOCODER_ID = Literal['hifigan', 'vocos']
+
+
 def play_wave(wave, 
               sr: int = 22050, 
               blocking: bool = False
@@ -17,7 +22,7 @@ def play_wave(wave,
 
 
 
-def get_model_path(package_path: Path = None, 
+def get_model_path(package_path: Optional[Path] = None, 
                    name: str = "fastpitch"
                    ) -> str:
     file_entry = files_dict[name]
@@ -31,43 +36,64 @@ def get_model_path(package_path: Path = None,
     
     return model_path.as_posix()
 
-def get_model(name: str = 'fastpitch2wave', 
-              cuda: bool =True
+
+def get_model(model_id: _MODEL_ID = 'fastpitch',
+              vocoder_id: _VOCODER_ID = 'hifigan',
+              cuda: bool = True
               ) -> FastPitch2Wave:   
     package_path = Path(__file__).parent.parent
 
-    fastpitch_path = get_model_path(package_path, 'fastpitch')
-    hifigan_path = get_model_path(package_path, 'hifigan')
-    denoiser_path = get_model_path(package_path, 'denoiser')
+    fastpitch_path = get_model_path(package_path, model_id)
+    hifigan_path = get_model_path(package_path, vocoder_id)    
+    denoiser_path = get_model_path(package_path, 'denoiser') \
+        if vocoder_id == 'hifigan' else None
+    
     tts_model = FastPitch2Wave(
-        fastpitch_path, hifigan_path,
-        denoiser_path, cuda=cuda)
+        fastpitch_path, 
+        hifigan_path,
+        denoiser_path,
+        vocoder_id=vocoder_id,
+        cuda=cuda)
     
     return tts_model
+
+
+def get_available_models():
+    return {
+        'models': get_args(_MODEL_ID),
+        'vocoders': get_args(_VOCODER_ID),
+    }
+
 
 def tts(text: str, 
         speaker: int = 0,
         pace: float = 1.,
         denoise: float = 0.005,   
         play: bool = False,
-        vowelizer: _VOWELIZER = None,
+        vowelizer: Optional[_VOWELIZER] = None,
         pitch_mul: float = 1.,
-        pitch_add: float = 0.,      
-        save_to: str = None,
-        bits_per_sample: int = 32,
-        cuda: bool = True
+        pitch_add: float = 0., 
+        cuda: Optional[int] = None,
+        model_id: _MODEL_ID = 'fastpitch',
+        vocoder_id: _VOCODER_ID = 'hifigan',
+        save_to: Optional[str] = None,
+        bits_per_sample: int = 32,        
         ) -> np.ndarray:
     """
     Parameters:
         text (str): Text
-        speaker (int): Speaker id (0-3)
+        speaker (int): Speaker ID (0-3)
         pace (float): Speaker pace
-        denoise (float): Denoiser strength
-        play (bool): Play audio? 
+        denoise (float): Denoiser strength        
+        play (bool): Play audio?
         vowelizer [shakkala|shakkelha]: Optional; Vowelizer model
+        pitch_mul (float): Pitch multiplier
+        pitch_add (float): Pitch offset
+        cuda (int): Optional; CUDA device index
+        model_id (str): Model ID for Text->Mel model
+        vocoder_id (str): Model ID for vocoder model
         save_to (str): Optional; Filepath where audio WAV file is saved 
         bits_per_sample (int): when `save_to` is specified (8, 16 or 32 bit)
-        cuda (bool): Use CUDA provider?
         
     Returns:
         (ndarray): Waveform sampled at 22050Hz, shape: [n_samples]
@@ -84,13 +110,16 @@ def tts(text: str,
         >>> wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
         
     """
-    if not hasattr(tts, 'model'):
-        setattr(tts, 'model', get_model(cuda=cuda))
+    model_params = (model_id, vocoder_id, cuda)
+    if not hasattr(tts, 'model') or tts.params != model_params:
+        setattr(tts, 'model', get_model(*model_params))
+        setattr(tts, 'params', model_params)    
     
     wave_out = tts.model.infer(text, speaker, pace, denoise, 
                                vowelizer=vowelizer, 
                                pitch_mul=pitch_mul,
                                pitch_add=pitch_add,)
+    
     if play: play_wave(wave_out)
     if save_to is not None:
         save_wave(wave_out, save_to, sample_rate=22050, 

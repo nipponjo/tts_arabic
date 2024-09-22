@@ -8,9 +8,14 @@ class FastPitch2Mel:
     def __init__(self, 
                  sd_path: str = "data/fp_ms.onnx",
                  arabic_in: bool = True,
-                 cuda: bool = False) -> None:
+                 cuda: int = None) -> None:
         providers = ['CPUExecutionProvider']
-        if cuda: providers.insert(0, 'CUDAExecutionProvider')
+        if cuda is not None:           
+            if not isinstance(cuda, int): cuda = 0
+            providers.insert(0, ('CUDAExecutionProvider', {
+                'device_id': cuda,
+                # "cudnn_conv_algo_search": "DEFAULT",
+            }))
         self.ort_sess = ort.InferenceSession(
             sd_path, providers=providers)
         self.arabic_in = arabic_in
@@ -45,10 +50,23 @@ class FastPitch2Mel:
         Parameters:
             text (str): Text
             pace (float): Speaker pace
-            speaker (int): Speaker id
+            speaker (int): Speaker id            
         
         Returns:
             (ndarray): Mel spectrogram, shape: [mel_bands, n_frames]
+        
+        
+        Examples:
+            >>> from tts_arabic import tts
+            >>> text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
+            >>> wave = tts(text, speaker=2, pace=0.9, play=True)
+            # Buckwalter transliteration
+            >>> text = ">als~alAmu Ealaykum yA Sadiyqiy."
+            >>> wave = tts(text, speaker=0, play=True)   
+            # Unvocalized input
+            >>> text_unvoc = "القهوة مشروب يعد من بذور البن المحمصة."
+            >>> wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
+            
         """
         tokens = self._tokenize(text, vowelizer=vowelizer)
         token_ids = text_utils.tokens_to_ids(tokens)
@@ -63,35 +81,6 @@ class FastPitch2Mel:
             },)[0].astype(np.float32)
         
         return mel_spec[0]
-    
-
-class HifiGanVocoder:
-    def __init__(self, 
-                 sd_path: str = "data/hifigan.onnx",
-                 cuda: bool = False) -> None:
-        providers = ['CPUExecutionProvider']
-        if cuda: providers.insert(0, 'CUDAExecutionProvider')
-        self.ort_sess = ort.InferenceSession(
-            sd_path, providers=providers)
-    
-    def infer(self, 
-              mel_spec: np.ndarray
-              ) -> np.ndarray:
-        """
-        Parameters:
-            mel_spec (ndarray): Mel spectrogram, shape: [mel_bands, n_frames]
-        
-        Returns:
-            (ndarray): Waveform, shape: [n_samples]
-        """
-        if mel_spec.ndim == 2:
-            mel_spec = mel_spec[None]
-        wave_out = self.ort_sess.run(
-            None,
-            {"input": mel_spec},
-        )[0].astype(float)
-        
-        return wave_out[0, 0]
 
 
 class HifiGanDenoiser:
@@ -118,16 +107,108 @@ class HifiGanDenoiser:
         return wave_out[0]
 
 
+class HifiGanVocoder:
+    def __init__(self, 
+                 sd_path: str = "data/hifigan.onnx",
+                 denoiser_path: str = "data/denoiser.onnx",
+                 cuda: bool = False) -> None:
+        providers = ['CPUExecutionProvider']
+        if cuda is not None:           
+            if not isinstance(cuda, int): cuda = 0
+            providers.insert(0, ('CUDAExecutionProvider', {
+                'device_id': cuda
+            }))
+        self.ort_sess = ort.InferenceSession(
+            sd_path, providers=providers)
+        
+        self.denoiser = None
+        if denoiser_path is not None:
+            self.denoiser = HifiGanDenoiser(denoiser_path, cuda=None)
+    
+    def infer(self, 
+              mel_spec: np.ndarray,
+              denoise: float = 0.005,
+              ) -> np.ndarray:
+        """
+        Parameters:
+            mel_spec (ndarray): Mel spectrogram, shape: [mel_bands, n_frames]
+        
+        Returns:
+            (ndarray): Waveform, shape: [n_samples]
+        """
+        if mel_spec.ndim == 2:
+            mel_spec = mel_spec[None]
+        wave_out = self.ort_sess.run(
+            None,
+            {"input": mel_spec},
+        )[0].astype(float)
+        
+        if denoise > 0 and self.denoiser is not None:
+            return self.denoiser.infer(wave_out[0, 0],
+                                       denoise=denoise)
+        
+        return wave_out[0, 0]
+
+
+
+class VocosVocoder:
+    def __init__(self, 
+                 sd_path: str = "data/hifigan.onnx",
+                 cuda: int = None) -> None:
+        providers = ['CPUExecutionProvider']
+        if cuda is not None:           
+            if not isinstance(cuda, int): cuda = 0
+            providers.insert(0, ('CUDAExecutionProvider', {
+                'device_id': cuda,
+                # "cudnn_conv_algo_search": "DEFAULT",               
+            }))
+        self.ort_sess = ort.InferenceSession(
+            sd_path, providers=providers)
+    
+    def infer(self, 
+              mel_spec: np.ndarray,
+              denoise: float = 0.005,
+              ) -> np.ndarray:
+        """
+        Parameters:
+            mel_spec (ndarray): Mel spectrogram, shape: [mel_bands, n_frames]
+            denoise (float): Denoiser strength
+            
+        Returns:
+            (ndarray): Waveform, shape: [n_samples]
+        """
+        if mel_spec.ndim == 2:
+            mel_spec = mel_spec[None]
+        wave_out = self.ort_sess.run(
+            None,
+            {
+                "mel_spec": mel_spec,
+                "denoise": np.array([denoise], dtype=np.float32), 
+             },)[0].astype(float)
+        
+        return wave_out[0]
+
+
 class FastPitch2Wave:
     def __init__(self,
                  sd_path_ttmel: str = "data/fp_ms.onnx",
                  sd_path_mel2wave: str = "data/hifigan.onnx",
                  sd_path_denoiser: str = "data/denoiser.onnx",
-                 cuda: bool = False
+                 vocoder_id: str = 'hifigan',                 
+                 cuda: int = None
                  ) -> None:
+        
         self.ttmel_model = FastPitch2Mel(sd_path_ttmel, cuda=cuda)
-        self.mel2wave_model = HifiGanVocoder(sd_path_mel2wave, cuda=cuda)
-        self.hifigan_denoiser = HifiGanDenoiser(sd_path_denoiser, cuda=False)
+        
+        if vocoder_id == 'hifigan':
+            self.mel2wave_model = HifiGanVocoder(sd_path_mel2wave,
+                                                 sd_path_denoiser,
+                                                 cuda=cuda)
+        else:
+            self.mel2wave_model = VocosVocoder(sd_path_mel2wave,                                          
+                                               cuda=None)
+        
+        # self.hifigan_denoiser = HifiGanDenoiser(sd_path_denoiser, cuda=False)
     
     def infer(self, 
               text: str, 
@@ -141,9 +222,12 @@ class FastPitch2Wave:
         """
         Parameters:
             text (str): Text
-            speaker (int): Speaker id
+            speaker (int): Speaker ID
             pace (float): Speaker pace            
-            denoise (float): Denoiser strength   
+            denoise (float): Denoiser strength  
+            vowelizer [shakkala|shakkelha]: Optional; Vowelizer model
+            pitch_mul (float): Pitch multiplier
+            pitch_add (float): Pitch offset 
             
         Returns:
             (ndarray): Waveform sampled at 22050Hz, shape: [n_samples]
@@ -155,9 +239,7 @@ class FastPitch2Wave:
                                           pitch_mul=pitch_mul,
                                           pitch_add=pitch_add,
                                           )
-        wave_out = self.mel2wave_model.infer(mel_spec)
-        if denoise > 0:
-            wave_out = self.hifigan_denoiser.infer(wave_out, 
-                                                   denoise=denoise)
+        wave_out = self.mel2wave_model.infer(mel_spec, 
+                                             denoise=denoise)
         
         return wave_out
