@@ -31,7 +31,7 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
  Pretrained models:
 |Model|Model ID|Type|#params|Paper|
 |-------|---|---|------|----|
-|FastPitch|fp|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|
+|FastPitch|fastpitch|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|
 |MixerTTS|mixer128|Text->Mel|2.9M|[arxiv](https://arxiv.org/abs/2110.03584)|
 |MixerTTS|mixer80|Text->Mel|1.5M|[arxiv](https://arxiv.org/abs/2110.03584)|
 |HiFi-GAN|hifigan|Vocoder|13.9M|[arxiv](https://arxiv.org/abs/2010.05646)|
