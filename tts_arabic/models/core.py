@@ -31,7 +31,7 @@ def get_model_path(package_path: Optional[Path] = None,
     model_path = package_path.joinpath(file_entry['file']) 
     if not model_path.parent.exists():
         model_path.parent.mkdir(parents=True)
-    if not model_path.exists() or (model_path.lstat().st_mtime < file_entry.get('timestamp', 0)):
+    if not model_path.exists(): #or (model_path.lstat().st_mtime < file_entry.get('timestamp', 0)):
         gdown.download(file_entry['url'], output=model_path.as_posix(), fuzzy=True)
     
     return model_path.as_posix()
