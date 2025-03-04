@@ -40,7 +40,8 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 The sequence of transformations is as follows:
 *Text* &rarr; Phonemizer &rarr; *Phonemes* &rarr; Tokenizer &rarr; *Token Ids* &rarr; **Text->Mel** model &rarr; *Mel spectrogram* &rarr; **Vocoder** model &rarr; *Wave*
-The `Text->Mel` models map token ids to mel frames. All models use the 80 bin configuration proposed by [HiFi-GAN](https://github.com/jik876/hifi-gan). This mel spectrogram contains frequencies up to 8kHz. The `vocoder` models map the mel spectrogram to a waveform. The vocoders with `vocoder_id` `hifigan` and `vocos` artificially extend the bandwidth to 11025Hz, and `vocos44` to 22050Hz.
+
+The `Text->Mel` models map token ids to mel frames. All models use the 80 bin configuration proposed by [HiFi-GAN](https://github.com/jik876/hifi-gan). This mel spectrogram contains frequencies up to 8kHz. The `vocoder` models map the mel spectrogram to a waveform. The vocoders with `vocoder_id` `hifigan` and `vocos` artificially extend the bandwidth to 11025Hz, and `vocos44` to 22050Hz. Samples for comparing the models can be found [here](https://nipponjo.github.io/tts-arabic-speakers/#models-cmp).
 
 TTS options:
 ```python
@@ -52,6 +53,7 @@ wave = tts(
     speaker = 1, # speaker id; choose between 0,1,2,3
     pace = 1, # speaker pace
     denoise = 0.005, # vocoder denoiser strength
+    volume = 0.9, # Max amplitude (between 0 and 1)
     play = True, # play audio?
     pitch_mul = 1, # pitch multiplier
     pitch_add = 0, # pitch offset
