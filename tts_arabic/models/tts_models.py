@@ -215,9 +215,11 @@ class FastPitch2Wave:
               speaker: int = 0,
               pace: float = 1.,              
               denoise: float = 0.005,
+              volume: float = 0.9,
               vowelizer: _VOWELIZER = None,
               pitch_mul: float = 1.,
-              pitch_add: float = 0.,      
+              pitch_add: float = 0.,
+              return_mel: bool = False,
               ) -> np.ndarray:
         """
         Parameters:
@@ -225,9 +227,10 @@ class FastPitch2Wave:
             speaker (int): Speaker ID
             pace (float): Speaker pace            
             denoise (float): Denoiser strength  
+            volume (float): Max amplitude (between 0 and 1)
             vowelizer [shakkala|shakkelha]: Optional; Vowelizer model
             pitch_mul (float): Pitch multiplier
-            pitch_add (float): Pitch offset 
+            pitch_add (float): Pitch offset
             
         Returns:
             (ndarray): Waveform sampled at 22050Hz, shape: [n_samples]
@@ -241,5 +244,8 @@ class FastPitch2Wave:
                                           )
         wave_out = self.mel2wave_model.infer(mel_spec, 
                                              denoise=denoise)
+        wave_out = volume*(wave_out / (np.max(np.abs(wave_out))+1e-5))
         
+        if return_mel:
+            return wave_out, mel_spec
         return wave_out

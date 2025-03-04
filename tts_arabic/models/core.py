@@ -11,7 +11,10 @@ except:
     pass
 
 _MODEL_ID = Literal['fastpitch', 'mixer128', 'mixer80']
-_VOCODER_ID = Literal['hifigan', 'vocos']
+_VOCODER_ID = Literal['hifigan', 'vocos', 'vocos44']
+_vocoder_id_to_sr = {
+    'hifigan': 22050, 'vocos': 22050, 'vocos44': 44100,
+}
 
 
 def play_wave(wave, 
@@ -68,7 +71,8 @@ def get_available_models():
 def tts(text: str, 
         speaker: int = 0,
         pace: float = 1.,
-        denoise: float = 0.005,   
+        denoise: float = 0.005,
+        volume: float = 0.9,
         play: bool = False,
         vowelizer: Optional[_VOWELIZER] = None,
         pitch_mul: float = 1.,
@@ -77,7 +81,8 @@ def tts(text: str,
         model_id: _MODEL_ID = 'fastpitch',
         vocoder_id: _VOCODER_ID = 'hifigan',
         save_to: Optional[str] = None,
-        bits_per_sample: int = 32,        
+        bits_per_sample: int = 32,
+        return_mel: bool = False,    
         ) -> np.ndarray:
     """
     Parameters:
@@ -85,6 +90,7 @@ def tts(text: str,
         speaker (int): Speaker ID (0-3)
         pace (float): Speaker pace
         denoise (float): Denoiser strength        
+        volume (float): Max amplitude (between 0 and 1)      
         play (bool): Play audio?
         vowelizer [shakkala|shakkelha]: Optional; Vowelizer model
         pitch_mul (float): Pitch multiplier
@@ -113,17 +119,22 @@ def tts(text: str,
     model_params = (model_id, vocoder_id, cuda)
     if not hasattr(tts, 'model') or tts.params != model_params:
         setattr(tts, 'model', get_model(*model_params))
-        setattr(tts, 'params', model_params)    
+        setattr(tts, 'params', model_params)
+        setattr(tts, 'sr', _vocoder_id_to_sr.get(vocoder_id, 22050))
     
-    wave_out = tts.model.infer(text, speaker, pace, denoise, 
+    output = tts.model.infer(text, speaker, pace, denoise, 
+                               volume=volume,
                                vowelizer=vowelizer, 
                                pitch_mul=pitch_mul,
-                               pitch_add=pitch_add,)
+                               pitch_add=pitch_add,
+                               return_mel=return_mel,
+                               )
     
-    if play: play_wave(wave_out)
+    wave_out = output[0] if isinstance(output, tuple) else output
+    
+    if play: play_wave(wave_out, sr=tts.sr)
     if save_to is not None:
-        save_wave(wave_out, save_to, sample_rate=22050, 
+        save_wave(wave_out, save_to, sample_rate=tts.sr, 
                   bits_per_sample=bits_per_sample)
         
-    
-    return wave_out
+    return output

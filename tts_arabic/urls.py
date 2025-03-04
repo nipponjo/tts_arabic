@@ -26,8 +26,13 @@ files_dict = {
         'file': 'data/vocos22.onnx',        
         'url': 'https://drive.google.com/file/d/1oNya-eTXB0_yqzHCIzPoHlJD1fwAUthI/view?usp=sharing',
         'timestamp': 1726944289.8381343,
-    },    
-    # HIFIGAB
+    },   
+    'vocos44': {
+        'file': 'data/vocos44.onnx',
+        'url': 'https://drive.google.com/file/d/1Ra0aNGYgD_j0jHs3rmytFEP0_JoIM2GJ/view?usp=sharing',
+        'timestamp': 1726944289.8381343,
+    },   
+    # HIFIGAN
     'hifigan': {
         'file': 'data/hifigan.onnx',
         'url': 'https://drive.google.com/file/d/1rZxulMhjrlQDheoGy7xnlWGjFYyjF9Gz/view?usp=sharing',
