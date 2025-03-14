@@ -1,6 +1,10 @@
-Arabic TTS model (FastPitch) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format.
+Arabic TTS model (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format.
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
+
+![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
+
+
 
 Install with:
 ```
