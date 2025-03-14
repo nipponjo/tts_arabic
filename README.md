@@ -2,10 +2,6 @@ Arabic TTS model (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://git
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
 
-![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
-
-
-
 Install with:
 ```
 pip install git+https://github.com/nipponjo/tts_arabic.git
@@ -75,3 +71,6 @@ wave = tts(
 References:
 
 The vocoder `vocos44` was converted from ([patriotyk/vocos-mel-hifigan-compat-44100khz](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
+
+
+![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
