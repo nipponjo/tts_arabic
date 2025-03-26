@@ -120,7 +120,7 @@ def tts(text: str,
                                pitch_mul=pitch_mul,
                                pitch_add=pitch_add,)
     
-    if play: play_wave(wave_out)
+    if play: play_wave(wave_out, blocking=True)
     if save_to is not None:
         save_wave(wave_out, save_to, sample_rate=22050, 
                   bits_per_sample=bits_per_sample)
