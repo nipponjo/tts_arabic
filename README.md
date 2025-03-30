@@ -28,10 +28,11 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 ```
 
- Pretrained models:
+Pretrained models:
 |Model|Model ID|Type|#params|Paper|Output|
 |-------|---|---|------|----|----|
 |FastPitch|fastpitch|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|Mel (80 bins)|
+|MixerTTS|mixer|Text->Mel||[arxiv](https://arxiv.org/abs/2110.03584)|Mel (80 bins)|
 |MixerTTS|mixer128|Text->Mel|2.9M|[arxiv](https://arxiv.org/abs/2110.03584)|Mel (80 bins)|
 |MixerTTS|mixer80|Text->Mel|1.5M|[arxiv](https://arxiv.org/abs/2110.03584)|Mel (80 bins)|
 |HiFi-GAN|hifigan|Vocoder|13.9M|[arxiv](https://arxiv.org/abs/2010.05646)|Wave (22.05kHz)|
@@ -68,9 +69,16 @@ wave = tts(
 
 ```
 
+Vowelizer models:
+
+|Model|Model ID|Paper|Repo|Architecture|
+|-----|--------|---------|----|--|
+|Shakkala|shakkala|-|[github](https://github.com/Barqawiz/Shakkala)|Bi-LSTM|
+|Shakkelha|shakkelha|[arxiv](https://arxiv.org/abs/1911.03531)|[github](https://github.com/AliOsm/shakkelha)|Bi-LSTM|
+
 References:
 
-The vocoder `vocos44` was converted from ([patriotyk/vocos-mel-hifigan-compat-44100khz](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
+The vocoder `vocos44` was converted from ([source](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
 
 
 ![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
