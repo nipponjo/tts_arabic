@@ -72,12 +72,16 @@ Vowelizer models:
 
 |Model|Model ID|Paper|Repo|Architecture|
 |-----|--------|---------|----|--|
-|Shakkala|shakkala|-|[github](https://github.com/Barqawiz/Shakkala)|Bi-LSTM|
+|CATT|catt_eo|[arxiv](https://arxiv.org/abs/2407.03236)|[github](https://github.com/abjadai/catt)|Transformer Encoder|
 |Shakkelha|shakkelha|[arxiv](https://arxiv.org/abs/1911.03531)|[github](https://github.com/AliOsm/shakkelha)|Bi-LSTM|
+|Shakkala|shakkala|-|[github](https://github.com/Barqawiz/Shakkala)|Bi-LSTM|
+
 
 References:
 
 The vocoder `vocos44` was converted from ([patriotyk/vocos-mel-hifigan-compat-44100khz](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
+
+The vowelizer `catt_eo` was converted from https://github.com/abjadai/catt/releases/tag/v2 *best_eo_mlm_ns_epoch_193.pt* (License: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/))
 
 
 ![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
