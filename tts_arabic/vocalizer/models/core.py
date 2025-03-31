@@ -1,12 +1,12 @@
 from pathlib import Path
-from typing import Literal, List, Union
+from typing import Literal, List, Union, get_args
 import gdown
 
 from ...urls import files_dict
-from ..models import Shakkala, Shakkelha
+from ..models import Shakkala, Shakkelha, CATTModel
 
-_MODEL_TYPE = Literal['shakkala', 'shakkelha']
-
+_MODEL_TYPE = Literal['catt_eo', 'shakkala', 'shakkelha']
+valid_model_ids = get_args(_MODEL_TYPE)
 
 def get_model_path(package_path, name="fastpitch") -> str:
     model_path = package_path.joinpath(files_dict[name]['file'])     
@@ -18,7 +18,7 @@ def get_model_path(package_path, name="fastpitch") -> str:
 
 
 def get_model(model: _MODEL_TYPE = 'shakkelha'):
-    assert model in ('shakkala', 'shakkelha')
+    assert model in valid_model_ids
 
     # data_folder = Path(__file__).parent.parent.parent.joinpath('data')
     package_path = Path(__file__).parent.parent.parent
@@ -26,7 +26,9 @@ def get_model(model: _MODEL_TYPE = 'shakkelha'):
     if model == 'shakkala':      
         return Shakkala(sd_path=model_path)     
     elif model == 'shakkelha':
-        return Shakkelha(sd_path=model_path) 
+        return Shakkelha(sd_path=model_path)
+    elif model == 'catt_eo':
+        return CATTModel(sd_path=model_path)
 
 
 def vocalize(input_text: Union[str, List[str]], 
@@ -52,7 +54,7 @@ def vocalize(input_text: Union[str, List[str]],
         >>> اللُّغَةُ الْعَرَبِيَّةُ هِيَ أَكْثَرُ اللُّغَاتِ السَّامِيَةِ تَحَدُّثًا، وَإِحْدَى أَكْثَرِ اللُّغَاتِ انْتِشَارًا فِي الْعَالِمِ، يَتَحَدَّثُهَا أَكْثَرُ مِنْ 467 مَلْيُونٍ نَسَمَةً
 
     """
-    assert model in ('shakkala', 'shakkelha')
+    assert model in valid_model_ids
     if not hasattr(vocalize, model):
         setattr(vocalize, model, get_model(model=model))
 
@@ -60,5 +62,8 @@ def vocalize(input_text: Union[str, List[str]],
         return vocalize.shakkala.predict(input_text, return_probs=return_probs)
     elif model == 'shakkelha':
         return vocalize.shakkelha.predict(input_text, return_probs=return_probs)
+    elif model == 'catt_eo':
+        return vocalize.catt_eo.predict(input_text, return_probs=return_probs)
+    
     else:
         return  

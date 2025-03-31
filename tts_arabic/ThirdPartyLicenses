@@ -111,6 +111,14 @@ SOFTWARE.
 
 ----------------------------------
 
+CATT:
+source: https://github.com/abjadai/catt
+
+Attribution-NonCommercial 4.0 International
+link: https://creativecommons.org/licenses/by-nc/4.0/
+
+----------------------------------
+
 coqui/XTTS-v2
 source: https://huggingface.co/coqui/XTTS-v2
 

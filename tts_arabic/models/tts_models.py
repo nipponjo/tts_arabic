@@ -30,13 +30,18 @@ class FastPitch2Mel:
         return vocalize(utterance_ar, model=vowelizer)
         
     def _tokenize(self, 
-                  utterance: str, 
-                  vowelizer: _VOWELIZER = None
-                  ) -> list[str]:    
-        utterance = self._vowelize(utterance=utterance, vowelizer=vowelizer)
+                  utterance: str,                   
+                  ) -> list[str]:
         if self.arabic_in:
             return text_utils.arabic_to_tokens(utterance)
         return text_utils.buckwalter_to_tokens(utterance)
+    
+    def _tokens_to_ids(self, tokens):
+        return text_utils.tokens_to_ids(tokens)
+    
+    def _text_to_ids(self, text):
+        tokens = self._tokenize(text)
+        return self._tokens_to_ids(tokens)        
 
     def infer(self, 
               text: str, 
@@ -68,8 +73,10 @@ class FastPitch2Mel:
             >>> wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
             
         """
-        tokens = self._tokenize(text, vowelizer=vowelizer)
-        token_ids = text_utils.tokens_to_ids(tokens)
+        
+        text = self._vowelize(text, vowelizer=vowelizer)        
+        token_ids = self._text_to_ids(text)
+        
         ids_batch = np.array(token_ids, dtype=np.int64)[None]
         mel_spec = self.ort_sess.run(
             None, {

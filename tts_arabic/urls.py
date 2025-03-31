@@ -55,5 +55,10 @@ files_dict = {
         'url': 'https://drive.google.com/file/d/1scpaMnVLjrDkGBL239pWeb7QW76b15W1/view?usp=sharing',
         'timestamp': 1713987119.2601905,
     },
+    'catt_eo': {
+        'file': 'data/catt_eo.onnx',
+        'url': 'https://drive.google.com/file/d/15fUlilIt6hp_glYAOpSGlb4zWurErUjn/view?usp=sharing',
+        'timestamp': 1713987119.2601905,
+    },
  
 }

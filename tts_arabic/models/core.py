@@ -82,7 +82,8 @@ def tts(text: str,
         vocoder_id: _VOCODER_ID = 'hifigan',
         save_to: Optional[str] = None,
         bits_per_sample: int = 32,
-        return_mel: bool = False,    
+        return_mel: bool = False,
+        blocking: bool = True,
         ) -> np.ndarray:
     """
     Parameters:
@@ -131,7 +132,7 @@ def tts(text: str,
                                )
     
     wave_out = output[0] if isinstance(output, tuple) else output
-    if play: play_wave(wave_out, blocking=True, sr=tts.sr)
+    if play: play_wave(wave_out, blocking=blocking, sr=tts.sr)
     if save_to is not None:
         save_wave(wave_out, save_to, sample_rate=tts.sr, 
                   bits_per_sample=bits_per_sample)
