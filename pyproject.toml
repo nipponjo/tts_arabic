@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tts_arabic"
+version = "0.0.1"
+description = "Arabic TTS models"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "nipponjo", email = "nipponjo.git@gmail.com" }
+]
+license = { file = "LICENSE" }
+keywords = ["Arabic", "TTS", "speech", "AI"]
+
+classifiers = [
+    "Programming Language :: Python",
+    "Natural Language :: Arabic",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Sound/Audio :: Sound Synthesis",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Environment :: GPU :: NVIDIA CUDA",
+]
+
+dependencies = [
+    "numpy",
+    "gdown>=5.1.0",
+    "onnxruntime-gpu; sys_platform != 'darwin'", # Windows, Linux
+    "onnxruntime; sys_platform == 'darwin'",     # macOS
+]
+
+[tool.setuptools.packages.find]
+include = ["tts_arabic*"]
+
+[tool.setuptools.package-data]
+# Include license files from the package
+tts_arabic = ["ThirdPartyLicenses"]
+

@@ -35,7 +35,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'numpy', 
-        'onnxruntime-gpu', 
+        "onnxruntime-gpu; sys_platform != 'darwin'", # for Windows, Linux
+        "onnxruntime; sys_platform == 'darwin'", # for Mac
         'gdown>=5.1.0'
         ],
     include_package_data=True,
