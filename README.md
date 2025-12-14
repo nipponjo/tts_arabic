@@ -2,13 +2,13 @@ Arabic TTS model (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://git
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
 
-Install with:
+**Install with**
 ```
 pip install git+https://github.com/nipponjo/tts_arabic.git
 ```
 
 
-Examples:
+**Examples**
 ```python
 
 # %%
@@ -28,7 +28,8 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 
 ```
 
-Pretrained models:
+**Pretrained models**
+
 |Model|Model ID|Type|#params|Paper|Output|
 |-------|---|---|------|----|----|
 |FastPitch|fastpitch|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|Mel (80 bins)|
@@ -44,7 +45,12 @@ The sequence of transformations is as follows:
 
 The `Text->Mel` models map token ids to mel frames. All models use the 80 bin configuration proposed by [HiFi-GAN](https://github.com/jik876/hifi-gan). This mel spectrogram contains frequencies up to 8kHz. The `vocoder` models map the mel spectrogram to a waveform. The vocoders with `vocoder_id` `hifigan` and `vocos` artificially extend the bandwidth to 11025Hz, and `vocos44` to 22050Hz. Samples for comparing the models can be found [here](https://nipponjo.github.io/tts-arabic-speakers/#models-cmp).
 
-TTS options:
+**Manuscript**
+
+More information about how the models were trained can be found in the manuscript *Arabic TTS with FastPitch: Reproducible Baselines, Adversarial Training, and Oversmoothing Analysis* ([arXiv](https://arxiv.org/abs/2512.00937) | [ResearchGate](https://www.researchgate.net/publication/398225096_Arabic_TTS_with_FastPitch_Reproducible_Baselines_Adversarial_Training_and_Oversmoothing_Analysis)).
+
+
+**TTS options**
 ```python
 from tts_arabic import tts
 
@@ -68,7 +74,7 @@ wave = tts(
 
 ```
 
-Vowelizer models:
+**Vowelizer models**
 
 |Model|Model ID|Paper|Repo|Architecture|
 |-----|--------|---------|----|--|
@@ -77,7 +83,7 @@ Vowelizer models:
 |Shakkala|shakkala|-|[github](https://github.com/Barqawiz/Shakkala)|Bi-LSTM|
 
 
-References:
+**References**
 
 The vocoder `vocos44` was converted from ([patriotyk/vocos-mel-hifigan-compat-44100khz](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
 
