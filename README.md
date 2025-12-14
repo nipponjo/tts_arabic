@@ -1,4 +1,4 @@
-Arabic TTS model (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format.
+Arabic TTS models (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format — usable as a Python package for offline speech synthesis.
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
 
