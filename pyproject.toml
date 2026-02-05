@@ -30,10 +30,12 @@ dependencies = [
     "onnxruntime; sys_platform == 'darwin'",     # macOS
 ]
 
+[project.urls]
+Repository = "https://github.com/nipponjo/tts_arabic"
+
 [tool.setuptools.packages.find]
 include = ["tts_arabic*"]
 
 [tool.setuptools.package-data]
 # Include license files from the package
 tts_arabic = ["ThirdPartyLicenses"]
-

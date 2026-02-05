@@ -34,7 +34,7 @@ class CATTModel:
         text = remove_non_arabic(text)
 
         input_ids, _ = self.tokenizer.encode(text, test_match=False)        
-        input_ids = np.array(input_ids)[None][:, 1:-1]
+        input_ids = np.array(input_ids, dtype=np.int64)[None][:, 1:-1]
         
         y_pred_probs = self.ort_sess.run(None, {'in_token_ids': input_ids})[0]        
         y_pred = y_pred_probs.argmax(-1)

@@ -15,11 +15,11 @@ pip install git+https://github.com/nipponjo/tts_arabic.git
 from tts_arabic import tts
 
 # %%
-text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
+text = "السَّلامُ عَلَيكُم يَا صَدِيقِي."
 wave = tts(text, speaker=2, pace=0.9, play=True)
 
 # %% Buckwalter transliteration
-text = ">als~alAmu Ealaykum yA Sadiyqiy."
+text = ">ls~alAmu Ealaykum yA Sadiyqiy."
 wave = tts(text, speaker=0, play=True)
 
 # %% Unvocalized input
@@ -54,7 +54,7 @@ More information about how the models were trained can be found in the manuscrip
 ```python
 from tts_arabic import tts
 
-text = "اَلسَّلامُ عَلَيكُم يَا صَدِيقِي."
+text = "السَّلامُ عَلَيكُم يَا صَدِيقِي."
 wave = tts(
     text, # input text
     speaker = 1, # speaker id; choose between 0,1,2,3

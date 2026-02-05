@@ -7,9 +7,9 @@ from setuptools import setup, find_packages
 
 NAME = 'tts_arabic'
 DESCRIPTION = 'Arabic TTS models'
-URL = 'https://github.com/nipponjo/'
-EMAIL = ''
-AUTHOR = ''
+URL = 'https://github.com/nipponjo/tts_arabic'
+EMAIL = 'nipponjo.git@gmail.com'
+AUTHOR = 'nipponjo'
 REQUIRES_PYTHON = '>=3.8.0'
 VERSION = '0.0.1'
 
@@ -34,16 +34,15 @@ setup(
 
     packages=find_packages(),
     install_requires=[
-        'numpy', 
-        "onnxruntime-gpu; sys_platform != 'darwin'", # for Windows, Linux
-        "onnxruntime; sys_platform == 'darwin'", # for Mac
+        'numpy',
+        "onnxruntime-gpu; sys_platform != 'darwin'",  # for Windows, Linux
+        "onnxruntime; sys_platform == 'darwin'",  # for Mac
         'gdown>=5.1.0'
-        ],
+    ],
     include_package_data=True,
     data_files=[
         ('license', ['tts_arabic/ThirdPartyLicenses',])
-        
-        ], 
+    ],
 
 
     classifiers=[
@@ -51,9 +50,8 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Programming Language :: Python',
         'Natural Language :: Arabic',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',   
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Multimedia :: Sound/Audio :: Sound Synthesis',
-        'Topic :: Multimedia :: Sound/Audio :: Speech',        
+        'Topic :: Multimedia :: Sound/Audio :: Speech',
         'Environment :: GPU :: NVIDIA CUDA',
-      
     ])
