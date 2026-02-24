@@ -1,3 +1,9 @@
+[[Pytorch repo]](https://github.com/nipponjo/tts-arabic-pytorch) 
+[[Samples]](https://nipponjo.github.io/tts-arabic-speakers) 
+[[huggingface]](https://huggingface.co/nipponjo/tts-arabic-onnx)
+[[Flutter app]](https://github.com/nipponjo/tts-arabic-flutter)
+[[arXiv]](https://arxiv.org/abs/2512.00937)
+
 Arabic TTS models (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://github.com/nipponjo/tts-arabic-pytorch) repo in the ONNX format — usable as a Python package for offline speech synthesis.
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
