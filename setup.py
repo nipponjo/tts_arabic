@@ -11,7 +11,7 @@ URL = 'https://github.com/nipponjo/tts_arabic'
 EMAIL = 'nipponjo.git@gmail.com'
 AUTHOR = 'nipponjo'
 REQUIRES_PYTHON = '>=3.8.0'
-VERSION = '0.0.1'
+VERSION = '0.1.0'
 
 HERE = Path(__file__).parent
 
