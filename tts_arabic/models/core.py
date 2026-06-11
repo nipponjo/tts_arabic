@@ -82,7 +82,7 @@ def tts(text: str,
         model_id: _MODEL_ID = 'fastpitch',
         vocoder_id: _VOCODER_ID = 'hifigan',
         save_to: Optional[str] = None,
-        bits_per_sample: int = 32,
+        bits_per_sample: Literal[8, 16, 24, 32] = 32,
         return_mel: bool = False,
         blocking: bool = True,
         ) -> np.ndarray:
@@ -160,7 +160,7 @@ def tts(text: str,
 
     bits_per_sample : int, default=32
         Bit depth of the saved WAV file when `save_to` is specified.
-        Supported values: 8, 16, or 32.
+        Supported values: 8, 16, 24 or 32.
 
     return_mel : bool, default=False
         If True, return both the waveform and the intermediate mel-spectrogram

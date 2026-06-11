@@ -1,11 +1,13 @@
 import wave
 import numpy as np
 
+from typing import Literal
+
 
 def save_wave(audio_data: np.ndarray,
               audio_path: str,
               sample_rate: int = 22050,  # Sample rate in Hz
-              bits_per_sample: int = 32,  # You can choose 16, 24 or 32 bits per sample
+              bits_per_sample: Literal[8, 16, 24, 32] = 32,
               normalize: bool = False
               ) -> None:
     """
@@ -15,11 +17,11 @@ def save_wave(audio_data: np.ndarray,
         sample_rate (int): 
         bits_per_sample (int): 8, 16, 24 or 32 bits per sample
         normalize (bool):    
-    
+
     """
     assert bits_per_sample in (8, 16, 24, 32)
     assert audio_data.ndim == 1
-      
+
     # Define the parameters of the audio file
     channels = 1  # Mono audio
 
