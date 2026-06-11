@@ -75,7 +75,7 @@ wave = tts(
     vocoder_id = 'hifigan', # Model ID for vocoder model
     cuda = None, # Optional; CUDA device index
     save_to = './test.wav', # Optionally; save audio WAV file
-    bits_per_sample = 32, # when save_to is specified (8, 16 or 32 bits)
+    bits_per_sample = 32, # when save_to is specified (8, 16, 24 or 32 bits)
     )
 
 ```
