@@ -1,4 +1,6 @@
 from typing import Literal, Optional, get_args
+from packaging.version import Version
+
 import numpy as np
 import gdown
 
@@ -35,8 +37,10 @@ def get_model_path(package_path: Optional[Path] = None,
         model_path.parent.mkdir(parents=True)
     # or (model_path.lstat().st_mtime < file_entry.get('timestamp', 0)):
     if not model_path.exists():
-        gdown.download(file_entry['url'],
-                       output=model_path.as_posix(), fuzzy=True)
+        if Version(gdown.__version__) < Version("6"):
+            gdown.download(file_entry['url'], output=model_path.as_posix(), fuzzy=True)
+        else:
+            gdown.download(file_entry['url'], output=model_path.as_posix())
 
     return model_path.as_posix()
 

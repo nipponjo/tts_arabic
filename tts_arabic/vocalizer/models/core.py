@@ -1,5 +1,7 @@
 from pathlib import Path
 from typing import Literal, List, Union, get_args
+from packaging.version import Version
+
 import gdown
 
 from ...urls import files_dict
@@ -13,7 +15,10 @@ def get_model_path(package_path, name="fastpitch") -> str:
     if not model_path.parent.exists():
         model_path.parent.mkdir(parents=True)
     if not model_path.exists():
-        gdown.download(files_dict[name]['url'], output=model_path.as_posix(), fuzzy=True)
+        if Version(gdown.__version__) < Version("6"):
+            gdown.download(files_dict[name]['url'], output=model_path.as_posix(), fuzzy=True)
+        else:
+            gdown.download(files_dict[name]['url'], output=model_path.as_posix())
     return model_path.as_posix()
 
 
