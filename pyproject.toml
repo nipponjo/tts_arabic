@@ -24,6 +24,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "packaging",
     "numpy",
     "gdown>=5.1.0",
     "onnxruntime-gpu; sys_platform != 'darwin'", # Windows, Linux
