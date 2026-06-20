@@ -1,6 +1,7 @@
 [[Pytorch repo]](https://github.com/nipponjo/tts-arabic-pytorch) 
 [[Samples]](https://nipponjo.github.io/tts-arabic-speakers) 
-[[huggingface]](https://huggingface.co/nipponjo/tts-arabic-onnx)
+[[huggingface](https://huggingface.co/nipponjo/tts-arabic-onnx) |
+[online demo](https://huggingface.co/spaces/nipponjo/tts-arabic-demo)]
 [[Flutter app]](https://github.com/nipponjo/tts-arabic-flutter)
 [[arXiv]](https://arxiv.org/abs/2512.00937)
 
