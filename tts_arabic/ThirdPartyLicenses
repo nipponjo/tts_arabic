@@ -1,3 +1,10 @@
+LICENSING SCOPE
+
+The MIT license at the repository root applies to original project code only.
+Third-party components and model artifacts retain their respective terms.
+See NOTICE.md at the repository root (also included in package license files)
+for model training provenance and the distinction between code and model terms.
+
 ----------------------------------
 
 FastPitch
@@ -56,6 +63,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+----------------------------------
+
+Vocos 22.05 kHz
+converted from: https://huggingface.co/BSC-LT/vocos-mel-22khz
+license: Apache 2.0
+
+----------------------------------
+
+Vocos 44.1 kHz
+converted from: https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz
+license: MIT
 
 ----------------------------------
 
@@ -207,3 +226,58 @@ The **licensor** is the individual or entity offering these terms, and the **mod
 
 
 **Use** means anything you do with the model or its output requiring one of your licenses.
+----------------------------------
+
+MixerTTS implementation and exported model graphs:
+source: https://github.com/nipponjo/mixer-tts-pytorch
+upstream: https://github.com/NVIDIA/NeMo
+license: Apache-2.0, with BSD-3-Clause notices in relevant adapted helpers
+Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.
+Full Apache-2.0 text is included at tts_arabic/vocalizer/models/catt/LICENSE.
+Apache terms: https://www.apache.org/licenses/LICENSE-2.0
+Retain applicable upstream notices when distributing adapted implementation
+code or exported graphs. This entry does not establish a separate license for
+pretrained checkpoint weights.
+
+----------------------------------
+
+Arabic-Phonetiser:
+component: tts_arabic/text/phonetise_buckwalter.py
+source: https://github.com/nawarhalabi/Arabic-Phonetiser
+license: Creative Commons Attribution-NonCommercial 4.0 International
+terms: https://creativecommons.org/licenses/by-nc/4.0/
+This component is excluded from the project's MIT license grant.
+
+----------------------------------
+
+MixerTTS adapted helper license notice:
+
+BSD 3-Clause License
+
+Copyright (c) 2021, NVIDIA Corporation
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

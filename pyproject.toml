@@ -37,6 +37,14 @@ Repository = "https://github.com/nipponjo/tts_arabic"
 [tool.setuptools.packages.find]
 include = ["tts_arabic*"]
 
+[tool.setuptools]
+license-files = [
+    "LICENSE",
+    "NOTICE.md",
+    "tts_arabic/ThirdPartyLicenses",
+    "tts_arabic/vocalizer/models/*/LICENSE*",
+]
+
 [tool.setuptools.package-data]
 # Include license files from the package
 tts_arabic = ["ThirdPartyLicenses"]

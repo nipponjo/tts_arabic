@@ -31,6 +31,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    license='MIT',
 
     packages=find_packages(),
     install_requires=[
@@ -42,7 +43,7 @@ setup(
     ],
     include_package_data=True,
     data_files=[
-        ('license', ['tts_arabic/ThirdPartyLicenses',])
+        ('license', ['LICENSE', 'NOTICE.md', 'tts_arabic/ThirdPartyLicenses'])
     ],
 
 
