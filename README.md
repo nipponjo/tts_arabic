@@ -9,18 +9,6 @@ Arabic TTS models (FastPitch, MixerTTS) from the [tts-arabic-pytorch](https://gi
 
 Audio samples can be found [here](https://nipponjo.github.io/tts-arabic-speakers).
 
-**Licensing**
-
-Original project code is licensed under [MIT](LICENSE), subject to the
-third-party exceptions in [NOTICE.md](NOTICE.md) and
-[ThirdPartyLicenses](tts_arabic/ThirdPartyLicenses). Model weights and datasets
-are licensed separately; the MIT code license does not cover them.
-
-The multi-speaker models use one Arabic Speech Corpus voice (CC BY 4.0) and
-three voices generated with XTTS-v2 (Coqui Public Model License 1.0.0).
-These mixed-training models are for noncommercial use unless separately
-authorized. The Arabic phonetiser also retains its CC BY-NC 4.0 terms.
-
 **Install with**
 ```
 pip install git+https://github.com/nipponjo/tts_arabic.git
@@ -54,7 +42,6 @@ wave = tts(text_unvoc, play=True, vowelizer='shakkelha')
 |FastPitch|fastpitch|Text->Mel|46.3M|[arxiv](https://arxiv.org/abs/2006.06873)|Mel (80 bins)|
 |MixerTTS|mixer128|Text->Mel|2.9M|[arxiv](https://arxiv.org/abs/2110.03584)|Mel (80 bins)|
 |MixerTTS|mixer80|Text->Mel|1.5M|[arxiv](https://arxiv.org/abs/2110.03584)|Mel (80 bins)|
-|MixerTTS (ASC, single speaker)|mixer128-asc|Text->Mel|3.15M|—|Mel (80 bins)|
 |HiFi-GAN|hifigan|Vocoder|13.9M|[arxiv](https://arxiv.org/abs/2010.05646)|Wave (22.05kHz)|
 |Vocos|vocos|Vocoder|13.4M|[arxiv](https://arxiv.org/abs/2306.00814)|Wave (22.05kHz)|
 |Vocos|vocos44|Vocoder|14.0M|[arxiv](https://arxiv.org/abs/2306.00814)|Wave (44.1kHz)|
@@ -64,44 +51,6 @@ The sequence of transformations is as follows:
 *Text* &rarr; Phonemizer &rarr; *Phonemes* &rarr; Tokenizer &rarr; *Token Ids* &rarr; **Text->Mel** model &rarr; *Mel spectrogram* &rarr; **Vocoder** model &rarr; *Wave*
 
 The `Text->Mel` models map token ids to mel frames. All models use the 80 bin configuration proposed by [HiFi-GAN](https://github.com/jik876/hifi-gan). This mel spectrogram contains frequencies up to 8kHz. The `vocoder` models map the mel spectrogram to a waveform. The vocoders with `vocoder_id` `hifigan` and `vocos` artificially extend the bandwidth to 11025Hz, and `vocos44` to 22050Hz. Samples for comparing the models can be found [here](https://nipponjo.github.io/tts-arabic-speakers/#models-cmp).
-
-**Local MixerTTS exports and model metadata**
-
-`mixer128-asc` loads `tts_arabic/data/mixer128-asc.onnx`. This is a local export;
-there is no download URL for it yet. From the sibling `mixer-tts-pytorch` repo:
-
-```bash
-python to_onnx_mixer.py --config configs/nawar_fp_adv_norm.yaml --output ../tts_arabic/tts_arabic/data/mixer128-asc.onnx
-```
-
-Use it with:
-
-```python
-from tts_arabic import tts, get_model
-
-wave = tts(text, model_id='mixer128-asc', save_to='speech.wav')
-model = get_model('mixer128-asc', cuda=None)
-print(model.sample_rate, model.metadata)
-```
-
-The default vocoder and output sample rate come from the ONNX metadata
-(currently `vocos44`, 44100 Hz). Playback and WAV headers use the resolved
-pipeline sample rate. Passing `vocoder_id='vocos'` explicitly continues to
-produce 22050 Hz audio. `tts.sr` contains the rate of the most recently used
-pipeline.
-
-The versioned JSON object in ONNX `custom_metadata_map['tts_arabic']` stores
-`schema_version`, `model_id`, `architecture`, `language`, ordered `symbols`,
-`vocoder_id`, `sample_rate`, `mel`, speaker/emotion counts, dimension, F0
-statistics, and checkpoint provenance. The runtime reads the symbol-to-ID
-mapping and default vocoder settings from the model. `mel.sample_rate` is the
-analysis rate, while `sample_rate` is the preferred waveform rate. If a vocoder
-also contains this metadata, its `sample_rate` takes precedence.
-
-Existing models without metadata retain their original token IDs, default
-HiFi-GAN vocoder, and legacy vocoder sample rates. The runtime feeds only the
-inputs present in each ONNX graph, supporting both legacy multi-speaker models
-and new single-speaker exports whose speaker/emotion inputs were removed.
 
 **Manuscript**
 
@@ -146,6 +95,19 @@ wave = tts(
 The vocoder `vocos44` was converted from ([patriotyk/vocos-mel-hifigan-compat-44100khz](https://huggingface.co/patriotyk/vocos-mel-hifigan-compat-44100khz)).
 
 The vowelizer `catt_eo` was converted from https://github.com/abjadai/catt/releases/tag/v2 *best_eo_mlm_ns_epoch_193.pt* (License: [Apache-2.0](https://github.com/abjadai/catt?tab=Apache-2.0-1-ov-file#readme))
+
+
+**Licensing**
+
+Original project code is licensed under [MIT](LICENSE), subject to the
+third-party exceptions in [NOTICE.md](NOTICE.md) and
+[ThirdPartyLicenses](tts_arabic/ThirdPartyLicenses). Model weights and datasets
+are licensed separately; the MIT code license does not cover them.
+
+The multi-speaker models use one Arabic Speech Corpus voice (CC BY 4.0) and
+three voices generated with XTTS-v2 (Coqui Public Model License 1.0.0).
+These mixed-training models are for noncommercial use unless separately
+authorized. The Arabic phonetiser also retains its CC BY-NC 4.0 terms.
 
 
 ![DALL·E 2025-03-14 18 56 01 - A surreal digital painting of a camel in a vast desert, with a futuristic speaker embedded in its mouth, symbolizing text-to-speech technology  The ca](https://github.com/user-attachments/assets/bcd31436-1e76-4432-9072-d0695f4d87e0)
